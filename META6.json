@@ -1,12 +1,25 @@
 {
-    "perl" : "6.*",
-    "name" : "IDNA::Punycode",
-    "author" : "github:FROGGS",
-    "version" : "1.0.0",
-    "description" : "Punycode implementation according to RFC3492",
-    "depends" : [ ],
-    "provides" : {
-        "IDNA::Punycode" : "lib/IDNA/Punycode.pm"
-    },
-    "source-url" : "git://github.com/FROGGS/p6-IDNA-Punycode.git"
+  "auth": "zef:raku-community-modules",
+  "build-depends": [
+  ],
+  "depends": [
+  ],
+  "description": "Punycode implementation according to RFC3492",
+  "license": "Artistic-2.0",
+  "name": "IDNA::Punycode",
+  "perl": "6.d",
+  "provides": {
+    "IDNA::Punycode": "lib/IDNA/Punycode.rakumod"
+  },
+  "resources": [
+  ],
+  "source-url": "git://github.com/raku-community-modules/IDNA-Punycode.git",
+  "tags": [
+    "IDNA",
+    "PUNYCODE",
+    "RFC"
+  ],
+  "test-depends": [
+  ],
+  "version": "1.0.1"
 }

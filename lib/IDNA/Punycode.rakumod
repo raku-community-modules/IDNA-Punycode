@@ -1,6 +1,3 @@
-use v6;
-unit module IDNA::Punycode;
-
 our $DEBUG = 0;
 
 constant BASE         = 36;
@@ -17,7 +14,6 @@ sub digit_value($code) {
     return ord($code) - ord("A")      if $code ~~ /<[A..Z]>/;
     return ord($code) - ord("a")      if $code ~~ /<[a..z]>/;
     return ord($code) - ord("0") + 26 if $code ~~ /<[0..9]>/;
-    return;
 }
 
 sub code_point($digit) {
@@ -34,7 +30,7 @@ sub adapt($delta is copy, $numpoints, $firsttime) {
         $delta div= BASE - TMIN;
         $k     += BASE;
     }
-    return $k + (((BASE - TMIN + 1) * $delta) div ($delta + SKEW));
+    $k + (((BASE - TMIN + 1) * $delta) div ($delta + SKEW));
 }
 
 sub decode_punycode($code is copy) is export {
@@ -71,9 +67,9 @@ sub decode_punycode($code is copy) is export {
         $i  = $i  %  (@output.elems + 1);
         splice(@output, $i, 0, $n);
         warn @output».fmt('%04x') if $DEBUG;
-        $i++;
+        ++$i;
     }
-    return @output.map(*.chr).join;
+    @output.map(*.chr).join
 }
 
 sub encode_punycode($input) is export {
@@ -81,11 +77,12 @@ sub encode_punycode($input) is export {
     my $delta = 0;
     my $bias  = INITIAL_BIAS;
 
-    my @input      = $input.split('');
+    my @input      = $input.comb;
     my @input-ords = $input.ords;
     my $output     = buf8.new( @input-ords.grep: 0 <= * < INITIAL_N );
     my $h  = my $b = $output.elems;
     return $input unless @input-ords.elems > $output.elems;
+
     $output[$output.elems] = $Delimiter.ord if $output;
     warn "basic codepoints: ($output.decode())" if $DEBUG;
 
@@ -115,8 +112,50 @@ sub encode_punycode($input) is export {
                 $h++;
             }
         }
-        $delta++;
-        $n++;
+        ++$delta;
+        ++$n;
     }
-    return 'xn--' ~ $output.decode;
+    'xn--' ~ $output.decode
 }
+
+=begin pod
+
+=head1 NAME
+
+IDNA::Punycode - Punycode implementation according to RFC3492
+
+=head1 SYNOPSIS
+
+=begin code :lang<raku>
+
+use IDNA::Punycode;
+
+say encode_punycode 'nice'  # nice
+say encode_punycode 'schön' # xn--schn-7qa
+
+say decode_punycode 'nice'         # nice
+say decode_punycode 'xn--schn-7qa' # schön
+
+=end code
+
+=head1 DESCRIPTION
+
+The C<IDNA::Punycode> provides an easy way to encode / decode strings
+according to L<RFC3492|https://www.rfc-editor.org/info/rfc3492>.
+
+=head1 AUTHOR
+
+Tobias Leich (FROGGS)
+
+Source can be located at: https://github.com/raku-community-modules/IDNA-Punycode .
+Comments and Pull Requests are welcome.
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright 2015, 2016, 2017 Tobias Leich, 2023 Raku Community
+
+This library is free software; you can redistribute it and/or modify it under the Artistic License 2.0.
+
+=end pod
+
+# vim: expandtab shiftwidth=4

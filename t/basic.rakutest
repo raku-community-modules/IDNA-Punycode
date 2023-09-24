@@ -1,10 +1,7 @@
-#!/usr/bin/perl6
-use v6;
 use Test;
-plan 8;
-
-use lib 'lib';
 use IDNA::Punycode;
+
+plan 8;
 
 is encode_punycode('abcdef'), 'abcdef', 'abcdef is left unchanged';
 is decode_punycode('abcdef'), 'abcdef', 'abcdef is left unchanged';
@@ -17,3 +14,5 @@ is decode_punycode('xn--22cdfh1b8fsa'), 'ยจฆฟคฏข', 'unicode roundt
 
 is encode_punycode('☺'), 'xn--74h', 'smiling face encodes to xn--74h';
 is decode_punycode('xn--74h'), '☺', 'xn--74h decodes to smiling face';
+
+# vim: expandtab shiftwidth=4

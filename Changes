@@ -1,0 +1,4 @@
+Revision history for IDNA::Punycode
+  
+{{$NEXT}}
+    - First version in zef ecosystem, no functional changes
